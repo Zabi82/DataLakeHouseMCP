@@ -1,0 +1,6 @@
+kafka-python
+fastavro
+requests
+mcp-server
+trino
+python-dotenv

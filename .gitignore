@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.swp
+*.bak
+*.tmp
+.DS_Store
+.env.example
+# Do NOT ignore .env
+!.env
+.venv/
