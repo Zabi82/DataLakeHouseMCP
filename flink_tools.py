@@ -68,25 +68,31 @@ def _sanitize_job_id(job_id: str) -> str:
         raise ValueError(f"Invalid job_id: {job_id}")
     return job_id
 
-def get_flink_job_details(job_id: str) -> dict:
+def get_flink_job_details(job_ids: list) -> dict:
     """
-    Returns details for a specific Flink job from the REST API.
-    Sanitizes job_id to prevent injection/scripting attacks.
+    Returns details for a list of Flink jobs from the REST API.
+    :param job_ids: List of Job IDs to fetch details for.
     """
-    try:
-        job_id = _sanitize_job_id(job_id)
-    except Exception as e:
-        logger.error(f"Invalid job_id '{job_id}': {e}")
-        return {"error": str(e)}
-    try:
-        resp = requests.get(f"{FLINK_REST_URL}/jobs/{job_id}")
-        resp.raise_for_status()
-        result = resp.json()
-        logger.info(f"Flink job details for '{job_id}': {result}")
-        return result
-    except Exception as e:
-        logger.error(f"Error fetching Flink job details for '{job_id}': {e}")
-        return {"error": str(e)}
+    if not isinstance(job_ids, list):
+        raise TypeError("job_ids must be a list of job IDs.")
+    results = {}
+    for job_id in job_ids:
+        try:
+            sanitized_id = _sanitize_job_id(job_id)
+        except Exception as e:
+            logger.error(f"Invalid job_id '{job_id}': {e}")
+            results[job_id] = {"error": str(e)}
+            continue
+        try:
+            resp = requests.get(f"{FLINK_REST_URL}/jobs/{sanitized_id}")
+            resp.raise_for_status()
+            result = resp.json()
+            logger.info(f"Flink job details for '{sanitized_id}': {result}")
+            results[job_id] = result
+        except Exception as e:
+            logger.error(f"Error fetching Flink job details for '{sanitized_id}': {e}")
+            results[job_id] = {"error": str(e)}
+    return results
 
 def probe_jobmanager_metric(metric_name: str) -> dict:
     """

@@ -92,13 +92,15 @@ def mcp_flink_jobs() -> dict:
     """
     return get_flink_jobs()
 
-@mcp.tool("flink_job_details", description="Get details for a specific Flink job by job ID, including status, vertices, and configuration.")
-def mcp_flink_job_details(job_id: str) -> dict:
+@mcp.tool("flink_job_details", description="Get details for a list of Flink jobs by job ID(s), including status, vertices, and configuration. Accepts a 'job_ids' list parameter.")
+def mcp_flink_job_details(job_ids: list) -> dict:
     """
-    Returns details for a specific Flink job, including status, vertices, and configuration.
-    :param job_id: The Job ID to fetch details for.
+    Returns details for a list of Flink jobs, including status, vertices, and configuration.
+    :param job_ids: List of Job IDs to fetch details for. Must be a list.
     """
-    return get_flink_job_details(job_id)
+    if not isinstance(job_ids, list):
+        return {"error": "job_ids must be a list of job IDs. Example: job_ids=['job1','job2']"}
+    return get_flink_job_details(job_ids)
 
 @mcp.tool("probe_jobmanager_metric", description="Probe a specific JobManager metric by name from the Flink REST API.")
 def mcp_probe_jobmanager_metric(metric_name: str) -> dict:
@@ -169,10 +171,13 @@ def mcp_execute_trino_query(query: str, catalog: str = "flink_demo", schema: str
     """
     return execute_trino_query(query, catalog, schema)
 
-@mcp.tool("iceberg_time_travel_query", description="Execute an Iceberg time travel query using Trino. Specify table, timestamp or snapshot_id, and a query. The tool rewrites the query to use FOR TIMESTAMP AS OF or FOR SNAPSHOT AS OF syntax.")
+@mcp.tool("iceberg_time_travel_query", description="Execute an Iceberg time travel query using Trino. Specify table, timestamp (ISO 8601 format, e.g. '2024-09-12T15:30:45.123456+05:30') or snapshot_id, and a query. The tool rewrites the query to use FOR TIMESTAMP AS OF or FOR SNAPSHOT AS OF syntax.")
 def mcp_iceberg_time_travel_query(query: str, table: str, catalog: str = "flink_demo", schema: str = "ice_db", timestamp: str = None, snapshot_id: int = None) -> dict:
     """
-    Executes an Iceberg time travel query using Trino. Specify table, timestamp or snapshot_id, and a query. The tool rewrites the query to use FOR TIMESTAMP AS OF or FOR SNAPSHOT AS OF syntax.
+    Executes an Iceberg time travel query using Trino.
+    Specify table, timestamp (ISO 8601 format, e.g. '2024-09-12T15:30:45.123456+05:30') or snapshot_id, and a query.
+    The tool rewrites the query to use FOR TIMESTAMP AS OF or FOR SNAPSHOT AS OF syntax.
+    Example timestamp: '2024-09-12T15:30:45.123456+05:30'
     """
     return iceberg_time_travel_query(query, table, catalog, schema, timestamp, snapshot_id)
 

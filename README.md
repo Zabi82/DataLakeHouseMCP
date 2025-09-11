@@ -29,6 +29,11 @@ DataLakeHouseMCP is a Python-based MCP server built using FastMCP. It exposes re
 - **Trino/Iceberg Tools**: List catalogs, schemas, tables, get table schema, execute queries, time travel queries, list snapshots.
 - **MCP Discovery**: All tools/resources are annotated for easy discovery by MCP clients.
 
+### Timestamp Format for Iceberg Time Travel Queries
+When using the `iceberg_time_travel_query` tool, the `timestamp` parameter must be in ISO 8601 format.
+Example: `'2024-09-12T15:30:45.123456+05:30'`
+This format includes date, time (with optional milliseconds), and timezone offset.
+
 ## Installation
 
 1. **Clone the repository**
