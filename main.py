@@ -6,8 +6,6 @@ from flink_tools import (
     get_flink_taskmanagers_metrics,
     get_flink_jobs,
     get_flink_job_details,
-    probe_jobmanager_metric,
-    probe_taskmanager_metric,
     probe_jobmanager_metrics,
     probe_taskmanager_metrics,
     get_flink_taskmanagers
@@ -102,36 +100,20 @@ def mcp_flink_job_details(job_ids: list) -> dict:
         return {"error": "job_ids must be a list of job IDs. Example: job_ids=['job1','job2']"}
     return get_flink_job_details(job_ids)
 
-@mcp.tool("probe_jobmanager_metric", description="Probe a specific JobManager metric by name from the Flink REST API.")
-def mcp_probe_jobmanager_metric(metric_name: str) -> dict:
-    """
-    Probe a specific JobManager metric by name from the Flink REST API.
-    """
-    return probe_jobmanager_metric(metric_name)
-
-@mcp.tool("probe_taskmanager_metric", description="Probe a specific TaskManager metric by name from the Flink REST API. Requires TaskManager ID and metric name.")
-def mcp_probe_taskmanager_metric(taskmanager_id: str, metric_name: str) -> dict:
-    """
-    Probe a specific TaskManager metric by name from the Flink REST API.
-    :param taskmanager_id: The ID of the TaskManager to probe.
-    :param metric_name: The metric name to fetch.
-    """
-    return probe_taskmanager_metric(taskmanager_id, metric_name)
-
-@mcp.tool("probe_jobmanager_metrics", description="Probe a list of JobManager metrics by name from the Flink REST API. Accepts a list of metric names.")
+@mcp.tool("probe_jobmanager_metrics", description="Probe one or more JobManager metrics by name from the Flink REST API. Accepts a list of metric names (can be a single metric in a list).")
 def mcp_probe_jobmanager_metrics(metric_names: list) -> dict:
     """
-    Probe a list of JobManager metrics by name from the Flink REST API.
-    :param metric_names: List of metric names to fetch.
+    Probe one or more JobManager metrics by name from the Flink REST API.
+    :param metric_names: List of metric names to fetch (can be a single metric in a list).
     """
     return probe_jobmanager_metrics(metric_names)
 
-@mcp.tool("probe_taskmanager_metrics", description="Probe a list of TaskManager metrics by name from the Flink REST API. Accepts TaskManager ID and a list of metric names.")
+@mcp.tool("probe_taskmanager_metrics", description="Probe one or more TaskManager metrics by name from the Flink REST API. Accepts TaskManager ID and a list of metric names (can be a single metric in a list).")
 def mcp_probe_taskmanager_metrics(taskmanager_id: str, metric_names: list) -> dict:
     """
-    Probe a list of TaskManager metrics by name from the Flink REST API.
+    Probe one or more TaskManager metrics by name from the Flink REST API.
     :param taskmanager_id: The ID of the TaskManager to probe.
-    :param metric_names: List of metric names to fetch.
+    :param metric_names: List of metric names to fetch (can be a single metric in a list).
     """
     return probe_taskmanager_metrics(taskmanager_id, metric_names)
 

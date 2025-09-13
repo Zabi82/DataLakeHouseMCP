@@ -94,41 +94,10 @@ def get_flink_job_details(job_ids: list) -> dict:
             results[job_id] = {"error": str(e)}
     return results
 
-def probe_jobmanager_metric(metric_name: str) -> dict:
-    """
-    Probe a specific JobManager metric by name from the Flink REST API.
-    """
-    try:
-        resp = requests.get(f"{FLINK_REST_URL}/jobmanager/metrics?get={metric_name}")
-        resp.raise_for_status()
-        result = resp.json()
-        logger.info(f"Probed JobManager metric '{metric_name}': {result}")
-        return result
-    except Exception as e:
-        logger.error(f"Error probing JobManager metric '{metric_name}': {e}")
-        return {"error": str(e)}
-
-
-def probe_taskmanager_metric(taskmanager_id: str, metric_name: str) -> dict:
-    """
-    Probe a specific TaskManager metric by name from the Flink REST API.
-    :param taskmanager_id: The ID of the TaskManager to probe.
-    :param metric_name: The metric name to fetch.
-    """
-    try:
-        resp = requests.get(f"{FLINK_REST_URL}/taskmanagers/{taskmanager_id}/metrics?get={metric_name}")
-        resp.raise_for_status()
-        result = resp.json()
-        logger.info(f"Probed TaskManager '{taskmanager_id}' metric '{metric_name}': {result}")
-        return result
-    except Exception as e:
-        logger.error(f"Error probing TaskManager '{taskmanager_id}' metric '{metric_name}': {e}")
-        return {"error": str(e)}
-
 def probe_jobmanager_metrics(metric_names: list) -> dict:
     """
-    Probe a list of JobManager metrics by name from the Flink REST API.
-    :param metric_names: List of metric names to fetch.
+    Probe one or more JobManager metrics by name from the Flink REST API.
+    :param metric_names: List of metric names to fetch (can be a single metric in a list).
     """
     try:
         metrics_query = "&".join([f"get={name}" for name in metric_names])
@@ -144,9 +113,9 @@ def probe_jobmanager_metrics(metric_names: list) -> dict:
 
 def probe_taskmanager_metrics(taskmanager_id: str, metric_names: list) -> dict:
     """
-    Probe a list of TaskManager metrics by name from the Flink REST API.
+    Probe one or more TaskManager metrics by name from the Flink REST API.
     :param taskmanager_id: The ID of the TaskManager to probe.
-    :param metric_names: List of metric names to fetch.
+    :param metric_names: List of metric names to fetch (can be a single metric in a list).
     """
     try:
         metrics_query = "&".join([f"get={name}" for name in metric_names])

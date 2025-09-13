@@ -61,7 +61,7 @@ uv pip install -r requirements.txt
 This MCP server runs in local stdio mode and does **not** expose an HTTP endpoint. It is intended to be launched and connected to directly by MCP clients (such as Copilot Chat or Claude Desktop) using standard input/output.
 
 ```bash
-uv run main.py
+uv run "/path/to/DataLakeHouseMCP/main.py"
 ```
 
 ## Configuring MCP Clients
@@ -135,7 +135,51 @@ uv run main.py
 }
 ```
 
-## Example Prompts for MCP Clients
+## MCP Tools & Features
+
+### Kafka Tools
+- **List Kafka Topics**  
+  `kafka_topics` — Lists all Kafka topics available in the local cluster.
+- **Peek Kafka Topic**  
+  `peek_kafka_topic` — Retrieves the latest N messages from a specified Kafka topic (supports Avro, JSON, and plain text).
+
+### Flink Tools
+- **Cluster Overview**  
+  `flink_overview` — Shows Flink cluster metrics: number of task managers, slots, jobs running/finished/cancelled/failed.
+- **JobManager Metrics**  
+  `flink_jobmanager_metrics` — Returns JobManager metrics (heap memory, CPU load, JVM/process stats).
+- **TaskManagers Metrics**  
+  `flink_taskmanagers_metrics` — Returns TaskManagers metrics (heap memory, network IO, slot utilization).
+- **List Flink Jobs**  
+  `flink_jobs` — Lists all Flink jobs running on the cluster (IDs, names, status).
+- **Flink Job Details**  
+  `flink_job_details` — Returns details for one or more Flink jobs by job ID(s): status, vertices, configuration.  
+  _Note: Accepts a list of job IDs._
+- **Probe JobManager Metrics**  
+  `probe_jobmanager_metrics` — Probe one or more JobManager metrics by name (pass a list, even for a single metric).
+- **Probe TaskManager Metrics**  
+  `probe_taskmanager_metrics` — Probe one or more TaskManager metrics by name and TaskManager ID (pass a list, even for a single metric).
+- **List TaskManagers**  
+  `flink_taskmanagers` — Lists all Flink TaskManagers and their details.
+
+### Trino & Iceberg Tools
+- **List Iceberg Tables**  
+  `trino_iceberg_tables` — Lists all Iceberg tables in a specified Trino catalog.
+- **List Trino Catalogs**  
+  `trino_catalogs` — Lists all catalogs available in the Trino cluster.
+- **List Trino Schemas**  
+  `trino_schemas` — Lists all schemas in a specified Trino catalog.
+- **Get Iceberg Table Schema**  
+  `get_iceberg_table_schema` — Returns the schema (columns/types) of an Iceberg table.
+- **Execute Trino Query**  
+  `execute_trino_query` — Executes a SQL query on Trino and returns results.
+- **Iceberg Time Travel Query**  
+  `iceberg_time_travel_query` — Executes a time travel query on Iceberg tables using Trino.  
+  _Timestamp format: ISO 8601 (e.g., `2024-09-12T15:30:45.123456+05:30`)._
+- **List Iceberg Snapshots**  
+  `list_iceberg_snapshots` — Lists all snapshots for a given Iceberg table (snapshot_id, committed_at, operation, etc.).
+
+## Example Prompts
 
 You can use the following prompts in any MCP-enabled client:
 - "List all Kafka topics."
@@ -157,6 +201,22 @@ All tools are annotated with descriptions. MCP clients will auto-discover availa
 ## Extending
 
 Add new tools/resources by creating functions in the appropriate file and annotating with `@mcp.tool` or `@mcp.resource`.
+
+## Testing & Troubleshooting
+
+### MCP Inspector Tool
+
+You can use the [MCP Inspector](https://www.npmjs.com/package/@modelcontextprotocol/inspector) to test and troubleshoot the MCP server and its tools. This is especially useful for verifying tool interfaces, inspecting tool annotations, and simulating LLM interactions.
+
+#### Usage
+
+Run the following command in your project directory:
+
+```
+npx @modelcontextprotocol/inspector uv run
+```
+
+This will start the MCP Inspector in stdio mode, allowing you to interactively test tool definitions and server responses. For more details, see the [MCP Inspector documentation](https://github.com/modelcontextprotocol/inspector).
 
 ## Troubleshooting
 
