@@ -213,7 +213,7 @@ You can use the [MCP Inspector](https://www.npmjs.com/package/@modelcontextproto
 Run the following command in your project directory:
 
 ```
-npx @modelcontextprotocol/inspector uv run
+npx @modelcontextprotocol/inspector uv run "/path/to/DataLakeHouseMCP/main.py"
 ```
 
 This will start the MCP Inspector in stdio mode, allowing you to interactively test tool definitions and server responses. For more details, see the [MCP Inspector documentation](https://github.com/modelcontextprotocol/inspector).
