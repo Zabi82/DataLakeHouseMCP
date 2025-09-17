@@ -168,7 +168,7 @@ uv run "/path/to/DataLakeHouseMCP/main.py"
 - **List Trino Catalogs**  
   `trino_catalogs` — Lists all catalogs available in the Trino cluster.
 - **List Trino Schemas**  
-  `trino_schemas` — Lists all schemas in a specified Trino catalog.
+  `trino_schemas` — Lists all schemas in a specified list of Trino catalogs.
 - **Get Iceberg Table Schema**  
   `get_iceberg_table_schema` — Returns the schema (columns/types) of an Iceberg table.
 - **Execute Trino Query**  

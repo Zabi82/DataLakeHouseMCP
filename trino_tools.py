@@ -32,21 +32,29 @@ def list_trino_catalogs() -> dict:
         return {"error": str(e)}
 
 
-def list_trino_schemas(catalog: str = "flink_demo") -> dict:
+def list_trino_schemas(catalogs: list = ["flink_demo"]) -> dict:
     """
-    Lists all schemas in the specified Trino catalog using the Trino Python client.
+    Lists all schemas for each specified Trino catalog using the Trino Python client.
+    Accepts a list of catalog names and returns a mapping of catalog to its schemas.
     """
+    result = {}
     try:
-        conn = get_trino_connection()
-        cur = conn.cursor()
-        cur.execute(f"SHOW SCHEMAS FROM {catalog}")
-        schemas = [row[0] for row in cur.fetchall()]
-        cur.close()
-        conn.close()
-        logger.info(f"Trino schemas for catalog '{catalog}' fetched: {schemas}")
-        return {"schemas": schemas}
+        for catalog in catalogs:
+            try:
+                conn = get_trino_connection()
+                cur = conn.cursor()
+                cur.execute(f"SHOW SCHEMAS FROM {catalog}")
+                schemas = [row[0] for row in cur.fetchall()]
+                cur.close()
+                conn.close()
+                logger.info(f"Trino schemas for catalog '{catalog}' fetched: {schemas}")
+                result[catalog] = schemas
+            except Exception as e:
+                logger.error(f"Error fetching Trino schemas for catalog '{catalog}': {e}")
+                result[catalog] = {"error": str(e)}
+        return result
     except Exception as e:
-        logger.error(f"Error fetching Trino schemas for catalog '{catalog}': {e}")
+        logger.error(f"Error fetching Trino schemas for catalogs {catalogs}: {e}")
         return {"error": str(e)}
 
 

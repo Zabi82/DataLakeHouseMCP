@@ -132,12 +132,12 @@ def mcp_trino_catalogs() -> dict:
     """
     return list_trino_catalogs()
 
-@mcp.tool("trino_schemas", description="List all schemas in the specified Trino catalog using the REST API.")
-def mcp_trino_schemas(catalog: str = "flink_demo") -> dict:
+@mcp.tool("trino_schemas", description="List all schemas in the specified list of Trino catalogs. Accepts a list of catalog names to fetch schemas for multiple catalogs in a single call.")
+def mcp_trino_schemas(catalogs: list = ["flink_demo"]) -> dict:
     """
-    Lists all schemas in the given Trino catalog. Default catalog is 'flink_demo'.
+    Lists all schemas for each specified Trino catalog. Accepts a list of catalog names and returns a mapping of catalog to its schemas.
     """
-    return list_trino_schemas(catalog)
+    return list_trino_schemas(catalogs)
 
 @mcp.tool("get_iceberg_table_schema", description="Get the schema (columns and types) of an Iceberg table using Trino.")
 def mcp_get_iceberg_table_schema(catalog: str = "flink_demo", schema: str = "ice_db", table: str = None) -> dict:
