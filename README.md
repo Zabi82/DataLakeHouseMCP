@@ -12,6 +12,10 @@ DataLakeHouseMCP is a Python-based MCP server built using FastMCP. It exposes re
   - Install via pip: `pip install uv`
   - More info: [uv documentation](https://github.com/astral-sh/uv)
 
+## Demo Outline (including Lakehouse setup from other repo)
+
+![demo_outline.png](images/demo_outline.png)
+
 ## File Structure
 
 - `main.py`: MCP server entry point, tool registration.
@@ -181,18 +185,22 @@ uv run "/path/to/DataLakeHouseMCP/main.py"
 
 ## Example Prompts
 
-You can use the following prompts in any MCP-enabled client:
-- "List all Kafka topics."
-- "Show Flink cluster metrics."
-- "List Iceberg tables in Trino."
-- "Run a query on Iceberg table."
-- "Show Flink jobs."
-- "Get schema for table ice_users."
-- "Time travel query on Iceberg table."
-- "List Trino catalogs."
-- "Get details of Flink job 123."
-- "List snapshots for iceberg table."
-- "List all Flink TaskManagers and their details."
+You can use the following prompts in any MCP-enabled client with the provided Lakehouse setup
+1) Show me all Kafka topics available in the cluster
+2) Show some recent messages from page views
+3) Provide me a high level overview of my Flink cluster
+4) How many jobs are running and how many task slots are available in Flink ?
+5) Provide details of the running jobs
+6) What metrics are available for job manager and task manager
+7) Get me JVM memory related metric values for both job manager and task manager
+8) What are the different catalogs and schemas present in my iceberg environment
+9) What are the tables present in ice-db schema
+   10 How many records are there in ice user page views currently
+11) How much was the count  30 minutes ago Singapore time
+12) How much was the count at 7:30 PM Singapore time
+13) What are the most popular pages visited by users? Provide a pie chart with the page description to illustrate
+14) What about the top regions in terms of user traffic to the site. Provide another pie chart to illustrate this
+
 
 ## MCP Tool Discovery
 
